@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import time
 import json
@@ -14,7 +16,7 @@ def run(fp, url):
     if r.status_code == 200:
         print(json.dumps(r.json(), indent=4))
         print(
-            'TOOK {:.4f} seconds'.format(t1 - t0), 
+            'TOOK {:.4f} seconds'.format(t1 - t0),
             file=sys.stderr
         )
     else:
