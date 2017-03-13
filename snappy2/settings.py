@@ -142,3 +142,11 @@ SYMBOL_URLS = config(
 
 for url in SYMBOL_URLS:
     assert url.endswith('/'), url
+
+
+# Set this to something like '/tmp/symbols' to have all downloads
+# stored on disk.
+DEBUG_SAVE_SYMBOLS = config(
+    'DEBUG_SAVE_SYMBOLS',
+    default=None,
+)

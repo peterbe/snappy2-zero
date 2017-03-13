@@ -166,9 +166,15 @@ def load_symbol(filename, debug_id):
 
     # Prioritize PUBLIC symbols over FUNC symbols # XXX why?
     func_symbols.update(public_symbols)
-    with open('/tmp/symbols/{}.json'.format(filename), 'w') as f:
-        print('WROTE', '/tmp/symbols/{}.json'.format(filename))
-        json.dump(func_symbols, f, indent=4, sort_keys=True)
+
+    if settings.DEBUG_SAVE_SYMBOLS:
+        fp = os.path.join(
+            settings.DEBUG_SAVE_SYMBOLS,
+            '{}.json'.format(filename)
+        )
+        with open(fp, 'w') as f:
+            print('WROTE', fp)
+            json.dump(func_symbols, f, indent=4, sort_keys=True)
     return func_symbols
 
 
