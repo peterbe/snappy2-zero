@@ -14,3 +14,6 @@ python-decouple==3.0 \
 Unipath==1.1 \
     --hash=sha256:e6257e508d8abbfb6ddd8ec357e33589f1f48b1599127f23b017124d90b0fff7 \
     --hash=sha256:09839adcc72e8a24d4f76d63656f30b5a1f721fc40c9bcd79d8c67bdd8b47dae
+gunicorn==19.7.0 \
+    --hash=sha256:7b48e797990b7972862bf93c7eec637efb391217485920e6fa5f509376d94727 \
+    --hash=sha256:e6a9f2f3c4c7db48bf8eaec14d407ece2c93b7e905eaacec263055c541a4fe17
