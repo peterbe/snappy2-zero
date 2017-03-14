@@ -111,7 +111,11 @@ def get_symbol_map(filename, debug_id):
             return {}, False
         else:
             # print("Storing a {} bytes symbol_map".format(len(str(symbol_map))))
-            redis.set(cache_key, symbol_map, 60*100)  # XXX Consider using timeout=None to store it indefinitely
+            redis.set(
+                cache_key,
+                symbol_map,
+                timeout=settings.DEBUG and 60 * 100 or None
+            )
             return symbol_map, True
     else:
         # print('CACHE HIT', cache_key)
