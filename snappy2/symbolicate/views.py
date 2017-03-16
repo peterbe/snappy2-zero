@@ -27,7 +27,7 @@ def symbolicate_json(request):
         return http.HttpResponse(
             'Only POST works. See README\n\n'
             'Redis keys:\n'
-            '{}'.format('\n'.join(redis.keys('*'))),
+            '{}'.format('\n'.join(redis.iter_keys('*'))),
             content_type='text/plain'
         )
     json_body = json.loads(request.body.decode('utf-8'))
