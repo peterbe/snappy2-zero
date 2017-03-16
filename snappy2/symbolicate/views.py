@@ -24,10 +24,14 @@ class SymbolDownloadError(Exception):
 
 def symbolicate_json(request):
     if request.method != 'POST':
+        all_keys = list(redis.iter_keys('*'))
         return http.HttpResponse(
             'Only POST works. See README\n\n'
-            'Redis keys:\n'
-            '{}'.format('\n'.join(redis.iter_keys('*'))),
+            'Redis keys ({}):\n'
+            '{}'.format(
+                format(len(all_keys), ','),
+                '\n'.join(all_keys)
+            ),
             content_type='text/plain'
         )
     json_body = json.loads(request.body.decode('utf-8'))
