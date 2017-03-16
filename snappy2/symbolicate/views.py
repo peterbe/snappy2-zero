@@ -8,7 +8,7 @@ import requests
 
 from django.conf import settings
 from django import http
-from django.core.cache import cache, caches
+from django.core.cache import caches
 
 
 redis = caches['redis']
@@ -220,11 +220,15 @@ def get_symbol_map(filename, debug_id):
             information['symbol_map'] = symbol_map
             information['found'] = True
     else:
-        log_symbol_cache_hit(cache_key)
         if not symbol_map:
+            # It was cached but empty. That means it was logged that
+            # it was previously attempted but failed.
+            # The reason it's cached is to avoid it being looked up
+            # again and again when it's just going to continue to fail.
             information['symbol_map'] = {}
             information['found'] = False
         else:
+            log_symbol_cache_hit(cache_key)
             # If it was in cache, that means it was originally found.
             information['symbol_map'] = symbol_map
             information['found'] = True
@@ -233,17 +237,19 @@ def get_symbol_map(filename, debug_id):
 
 
 def log_symbol_cache_miss(cache_key):
+    cache_key = cache_key.replace('symbol:', 'count:')
     # This uses memcache
-    cache.set(cache_key, 0, 60 * 60 * 24)
+    redis.set(cache_key, 0, 60 * 60 * 24)
 
 
 def log_symbol_cache_hit(cache_key):
+    cache_key = cache_key.replace('symbol:', 'count:')
     try:
-        cache.incr(cache_key)
+        redis.incr(cache_key)
     except ValueError:
         # If it wasn't in memcache we can't increment this
         # hit, so we have to start from 1.
-        cache.set(cache_key, 1, 60 * 60 * 24)
+        redis.set(cache_key, 1, 60 * 60 * 24)
 
 
 def load_symbol(filename, debug_id):
@@ -354,7 +360,7 @@ def hit_ratio(request):
     cache_hits = {}
     count_keys = 0
     for key in redis.keys('symbol:*'):
-        count = cache.get(key)
+        count = redis.get(key.replace('symbol:', 'count:'))
         if count is None:
             # It was cached in Redis before we started logging
             # hits in memcache.
