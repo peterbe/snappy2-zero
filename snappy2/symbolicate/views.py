@@ -249,7 +249,6 @@ def log_symbol_cache_hit(cache_key):
 def load_symbol(filename, debug_id):
     downloaded = download_symbol(filename, debug_id)
     if not downloaded:
-        print("COULD NOT BE DOWNLOADED")
         return
     content, url = downloaded
     if not content:
@@ -317,7 +316,8 @@ def download_symbol(lib_filename, debug_id):
             debug_id,
             symbol_filename
         )
-        print("Requesting {}".format(url))
+        # print("Requesting {}".format(url))
+        logger.debug('Requesting {}'.format(url))
         try:
             response = requests.get(url)
         except requests.exceptions.ContentDecodingError as exception:
@@ -339,7 +339,7 @@ def download_symbol(lib_filename, debug_id):
                     f.write(response.text)
             return response.text, url
         elif response.status_code == 404:
-            print("Tried {} but 404".format(url))
+            logger.warning('{} 404 Not Found'.format(url))
         else:
             # XXX Need more grace. A download that isn't 200 or 404 means
             # either a *temporary* network operational error or something
@@ -388,4 +388,4 @@ def hit_ratio(request):
             )
         )
     output.append('')
-    return http.HttpResponse('\n'.join(output))
+    return http.HttpResponse('\n'.join(output), content_type='text/plain')
