@@ -359,7 +359,7 @@ def hit_ratio(request):
     cache_misses = []
     cache_hits = {}
     count_keys = 0
-    for key in redis.keys('symbol:*'):
+    for key in redis.iter_keys('symbol:*'):
         count = redis.get(key.replace('symbol:', 'count:'))
         if count is None:
             # It was cached in Redis before we started logging
