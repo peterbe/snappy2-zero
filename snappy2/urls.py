@@ -1,11 +1,17 @@
 from django.conf.urls import url, include
 
+import snappy2.main.urls
 import snappy2.symbolicate.urls
 
 
 urlpatterns = [
     url(
-        '',
-        include(snappy2.symbolicate.urls.urlpatterns, namespace='main')
+        r'^symbolicate/',
+        include(snappy2.symbolicate.urls.urlpatterns, namespace='symbolicate')
     ),
+    url(
+        '',
+        include(snappy2.main.urls.urlpatterns, namespace='main')
+    ),
+
 ]

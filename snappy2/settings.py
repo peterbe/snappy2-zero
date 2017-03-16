@@ -88,13 +88,13 @@ CACHES = {
     'default': {
         'BACKEND': config(
             'CACHE_BACKEND',
-            'django.core.cache.backends.locmem.LocMemCache',
-            # 'django.core.cache.backends.memcached.MemcachedCache',
+            # 'django.core.cache.backends.locmem.LocMemCache',
+            'django.core.cache.backends.memcached.MemcachedCache',
         ),
         'LOCATION': config(
             'CACHE_LOCATION',
-            'snowflake',
-            # '127.0.0.1:11211'
+            # 'snowflake',
+            '127.0.0.1:11211'
         ),
         'TIMEOUT': config('CACHE_TIMEOUT', 500, cast=int),
         'KEY_PREFIX': config('CACHE_KEY_PREFIX', 'snappy2'),

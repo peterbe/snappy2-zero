@@ -10,6 +10,7 @@ import requests
 
 def run(fp, url):
     body = json.load(open(fp))
+    body['debug'] = True
     t0 = time.time()
     r = requests.post(url, json=body)
     t1 = time.time()
